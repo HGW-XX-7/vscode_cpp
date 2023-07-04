@@ -12,7 +12,6 @@ int maximum_prefix_plus_suffix_1(vector<int> &input_list)
         maxq = max(sum, maxq);
     }
     return sum - ans;
-
 }
 int maximum_prefix_plus_suffix_2(vector<int> &input_list)
 {
