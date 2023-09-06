@@ -53,11 +53,11 @@ int maximum_prefix_plus_suffix_3(vector<int> &input_list)
         suffix_sum.push_back(temp_sum);
     }
     
-    for (int i = 0; i < suffix_sum.size(); i++)
-    {
-        cout<<prefix_sum[i]<<" ";
-        cout<<suffix_sum[i]<<endl;
-    }
+    // for (int i = 0; i < suffix_sum.size(); i++)
+    // {
+    //     cout<<prefix_sum[i]<<" ";
+    //     cout<<suffix_sum[i]<<endl;
+    // }
 
     int max_sum = 0;
     for (int i = 0; i < prefix_sum.size(); i++)//遍历求最大值
@@ -80,8 +80,8 @@ int main()
     // input_list = {0, 0, 0, 0, -1};
     // input_list = {1, 1, 1, 1, 1};
 
-    cout << maximum_prefix_plus_suffix_1(input_list) << endl;
+    //cout << maximum_prefix_plus_suffix_1(input_list) << endl;
     cout << maximum_prefix_plus_suffix_2(input_list) << endl;
-    cout << maximum_prefix_plus_suffix_3(input_list) << endl;
+    //cout << maximum_prefix_plus_suffix_3(input_list) << endl;
     return 0;
 }
