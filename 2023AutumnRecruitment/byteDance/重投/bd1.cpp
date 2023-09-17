@@ -6,11 +6,11 @@ using namespace std;
 
 // 自定义分子分母数据结构
 struct Fraction {
-    int numerator;   // 分子
-    int denominator; // 分母
+    long long numerator;   // 分子
+    long long denominator; // 分母
 
-    Fraction(int num, int den) {
-        int gcd_val = gcd(num, den); // 计算分子和分母的最大公约数
+    Fraction(long long num, long long den) {
+        long long gcd_val = gcd(num, den); // 计算分子和分母的最大公约数
         numerator = num / gcd_val;
         denominator = den / gcd_val;
     }
@@ -24,18 +24,18 @@ struct Fraction {
     }
 
 private:
-    int gcd(int a, int b) {
+    long long gcd(long long a, long long b) {
         if (b == 0) return a;
         return gcd(b, a % b);
     }
 };
 
 int main() {
-    int n;
+    long long n;
     cin >> n;
 
-    vector<int> a(n);
-    vector<int> b(n);
+    vector<long long> a(n);
+    vector<long long> b(n);
 
     for (int i = 0; i < n; i++) {
         cin >> a[i];
