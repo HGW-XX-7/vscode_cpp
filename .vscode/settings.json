@@ -8,6 +8,8 @@
         "algorithm": "cpp",
         "cmath": "cpp",
         "functional": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "vector": "cpp",
+        "utility": "cpp"
     }
 }
