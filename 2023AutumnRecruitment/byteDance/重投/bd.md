@@ -76,64 +76,90 @@ a[i] = b[i] = 0的情况 int应该全部换成long long
 ```
 7
 ```
-部分代码实现可以是：
-```cpp
-int func(vector<vector<int>> array){
-//求前缀
-vector<int> prf[3];
-for(i =0;i<3;++i){
-  prf[0][i]=array[j][i]
-  for(int j =1; j < array[i].size();++j)
-    prf[j]=array[j-1][i] | prf[j];
-}
-//
-vector<pair<int,int>> pO[3];
-for(i 0-3){
-pO[i]={make_pair(0, prf[i][0])}; //重要：这里的po就是在缩减长度 把原本1e5的数组缩小到32
-for(int j=0; j < prf[i].size()-1;++j){
-  if(a[j]!=a[j+1]){
-    x.push_back(make_pair(j+1,a[j+1]));
-}
-enum(i,j,k)
-}
-}
-enum：
-for(i 0-po0.size)
- for j 0-po1.size
-  for k 0-po2.size{
-int x1=poi0.first,x2=poi1.second;
-```
-y和z同理;
-```cpp
-if(x1+y1+z1+3<=k){
-  计算答案tmpans = x2|y2|z2
-  if(countOnes(tmpans)>countOnes(ans)) 
-    ans = tmpans
-}
-```
-对于每个数组，计算前缀或；对每个数组的前缀数组{(a,b)}进行维护，其中b代表前缀或，a代表它第一次出现的位置。假设前缀或是1,11,11,111,111 那么这个数组应该是(0,1) (1, 11)(3,111)；
-如果有前缀或数组a，那么计算x的方式是：（注意，是对三个数组分别求一个prefix）
-```cpp
-x={make_pair(0, a[0])};
-for(int i=0; i < a.size()-1;++i){
-  if(a[i]!=a[i+1]){
-    x.push_back(make_pair(i+1,a[i]));
-}
-}
-```
-那么你只需要枚举i j k，假设对三个数组操作之后得到的数组是x y z，那么计算答案就是伪代码：if(i+j+k+3<K){ans=maxcount1(ans, xi | yi | zi);}；
-注意：maxcount1就是计算两个数哪个1多；有部分实现可以写成伪代码：
 
+# 题解：
 ```cpp
-for(int i =0; i<x.size;++i)
-  for(j...)
-    for(k...)
-      if(i+j+k+3<=K){
-        ans=maxcount1(ans, xi | yi | zi);else break;
-      }
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <vector>
+ 
+using namespace std;
+ 
+//  获取数组前 number 个数字的按位或和
+int get_or(int q, int number,
+           vector<vector<int>> &prefix_or) {
+    return prefix_or[q][number];
+}
+ 
+//假设原数组为 1 10 1000
+// prefix_or 0 1 11 1011
+void calculate_prefix_or(vector<vector<int>> &array,
+                         vector<vector<int>> &prefix_or) {
+    for (int i = 0; i < 3; ++i) {
+        prefix_or[i].resize(array[i].size() + 1);
+        prefix_or[i][0] = 0;
+        for (int j = 1; j <= array[i].size(); ++j) {
+            prefix_or[i][j] = prefix_or[i][j - 1] | array[i][j - 1];
+        }
+    }
+}
+ 
+// 假设原数组为                 1 111 101 110 1000
+// prefix_or                0 1 111 111 111 1111
+// prefix_or_unique first   0 1 2   5
+// prefix_or_unique second  0 1 111 1111
+void calculate_prefix_or_unique(vector<vector<int>> &prefix_or,
+                                vector<vector<pair<int, int>>> &prefix_or_unique) {
+    for (int i = 0; i < 3; ++i) {
+        prefix_or_unique[i].clear();
+        prefix_or_unique[i].emplace_back(0, prefix_or[i][0]);
+        for (int j = 0; j < prefix_or[i].size() - 1; ++j) {
+            if (prefix_or[i][j] != prefix_or[i][j + 1]) {
+                prefix_or_unique[i].emplace_back(j + 1, prefix_or[i][j + 1]);
+            }
+        }
+    }
+}
+ 
+//计算答案
+int calculate_ans(vector<vector<pair<int, int>>> &prefix_or_unique, int &k) {
+    int ans = 0;
+    for (auto &a: prefix_or_unique[0]) {
+        if (a.first > k)break;
+        for (auto &b: prefix_or_unique[1]) {
+            if (a.first + b.first > k)break;
+            for (auto &c: prefix_or_unique[2]) {
+                if (a.first + b.first + c.first > k) break;
+                int tmp_ans = a.second | b.second | c.second;
+                ans = max(ans, tmp_ans);
+            }
+        }
+    }
+    return ans;
+}
+ 
+int solution(vector<vector<int>> &array, int &k) {
+    vector<vector<int>> pref_or(3);
+    calculate_prefix_or(array, pref_or);
+ 
+    vector<vector<pair<int, int>>> uniq(3);
+    calculate_prefix_or_unique(pref_or, uniq);
+ 
+    return calculate_ans(uniq, k);
+}
+ 
+int main() {
+    vector<vector<int>> array = {
+            {1, 16},
+            {1, 1024},
+            {1, 7, 5, 6, 8},
+    };
+    for (int k = 0; k < 11; ++k) {
+        cout << "k = " << k << ":\tans = " << solution(array, k) << endl;
+    }
+}
 ```
-
-注意：伪代码：if(x1+y1+z1+3<=k)表示取这么长，并且不多于k个的前缀之后，计算答案tmpans = x2|y2|z2，if(countOnes(tmpans)>countOnes(ans)) ans = tmpans，最后输出countOnes(tmp)
 
 **题4**
 用cpp解决这个问题：
