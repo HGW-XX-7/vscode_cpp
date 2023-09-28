@@ -1,0 +1,1 @@
+2个字符串string1、string2发现这2串长的很像，但是又不是完全一样，定义:如果string2是string1的全排列的1种，且string2和string1不是完全一样的话，返回true，否则返回false。
